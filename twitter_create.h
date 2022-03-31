@@ -44,6 +44,17 @@ typedef struct user{
 
 typedef struct twitter{
    // to be completed
+
+   user user_list[MAX_USERS];
+   tweet tweet_list[MAX_TWEETS];
+
 } twitter;
 
 void create_twitter_system(twitter * twitter_system);
+
+user *New_user(char username[USR_LENGHT]);
+
+void print_info(user *user_data);
+
+static unsigned numUsers = 0;
+static user *userList[MAX_USERS];
