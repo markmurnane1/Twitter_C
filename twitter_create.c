@@ -12,6 +12,8 @@ void create_twitter_system(twitter * twitter_system){
     //to be completed
 
 }
+
+// create new user
 user *New_user(char username[USR_LENGHT]) //Initializing a new user
 {
     user *user1 = malloc(sizeof(user));
@@ -23,14 +25,18 @@ user *New_user(char username[USR_LENGHT]) //Initializing a new user
 
     userList[numUsers] = user1;
 
+    // record addition to user list
     numUsers++;
 
     return user1;
 }
+
+
+// output user info
 void print_info(user *user_data)
 {
-    printf("Username: %s", user_data->username);
-    printf("Followers: %d", user_data->num_followers);
-    printf("Following: %d", user_data->num_following);
+    printf("\nUsername: %s", user_data->username);
+    printf("\nFollowers: %d", user_data->num_followers);
+    printf("\nFollowing: %d", user_data->num_following);
     printf("\n\n");
 }
