@@ -16,7 +16,7 @@ void create_twitter_system(twitter * twitter_system){
 }
 
 
-user *New_user(twitter * twitter_system){ //Initializing a new user
+void *New_user(twitter * twitter_system){ //Initializing a new user
     char username[USR_LENGHT];
 
     printf("%s %s\n", "Enter Username", "[press <ENTER> to end input]");
@@ -35,17 +35,5 @@ user *New_user(twitter * twitter_system){ //Initializing a new user
     // add new user to twitter system
     twitter_system->users[twitter_system->num_users++] = *usr;
 
-
-    return usr;
 }
 
-
-/* output user info
-void print_info(user *user_data)
-{
-    printf("\nUsername: %s", user_data->username);
-    printf("\nFollowers: %d", user_data->num_followers);
-    printf("\nFollowing: %d", user_data->num_following);
-    printf("\n\n");
-}
- */

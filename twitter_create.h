@@ -60,12 +60,4 @@ typedef struct twitter{
 
 void create_twitter_system(twitter * twitter_system);
 
-user *New_user(twitter * twitter_system);
-
-
-
-/*
-void print_info(user *user_data);
-static unsigned num_users = 0;
-static user *users[MAX_USERS];
-*/
+void *New_user(twitter * twitter_system);
