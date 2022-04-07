@@ -7,21 +7,20 @@ int main() {
     twitter twitter_system;
     create_twitter_system(&twitter_system);
 
+    // create & record addition to user list
+    for(int i = 0; i<3; i++){
+        New_user(&twitter_system);
+    }
 
 
-    //implement here the code to print the users
-    // for each user you need to print the username, the number of followers and the number of users that the current user is following
-    printf("Enter your username");
-    char name[USR_LENGHT];
-    scanf("%s", name);
+    // print user details
+    for(int i = 0; i < twitter_system.num_users; i++){
+        user usr = twitter_system.users[i];
+        printf("\nUser: %sFollowers: %d; Following: %d", usr.username, usr.num_followers, usr.num_followers );
+    }
 
-    user *user1 = New_user(name);
-
-    printf("Printing user number %d", numUsers);
-
-    print_info(user1);
-
-    printf("%d", numUsers);
+    puts("");
 
     return 0;
+
 }
