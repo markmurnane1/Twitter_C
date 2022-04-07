@@ -25,12 +25,15 @@
 //Max num of users
 #define MAX_USERS 100
 
+
 typedef struct tweet{
     int id;
     char msg[TWEET_LENGTH];
     char user[USR_LENGHT];
 
 }tweet;
+
+
 
 typedef struct user{
     char username[USR_LENGHT];
@@ -42,19 +45,27 @@ typedef struct user{
     int num_following;
 }user;
 
-typedef struct twitter{
-   // to be completed
 
-   user user_list[MAX_USERS];
-   tweet tweet_list[MAX_TWEETS];
+
+typedef struct twitter{
+
+   user users[MAX_USERS];
+   tweet tweets[MAX_TWEETS];
+   unsigned int num_users;
+   unsigned int num_tweets;
 
 } twitter;
 
+
+
 void create_twitter_system(twitter * twitter_system);
 
-user *New_user(char username[USR_LENGHT]);
+user *New_user(twitter * twitter_system);
 
+
+
+/*
 void print_info(user *user_data);
-
-static unsigned numUsers = 0;
-static user *userList[MAX_USERS];
+static unsigned num_users = 0;
+static user *users[MAX_USERS];
+*/
