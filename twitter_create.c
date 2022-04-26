@@ -21,7 +21,10 @@ void create_new_user(twitter * twitter_system){
     printf("%s %s\n", "Enter Username", "[press <ENTER> to end input]");
 
     // read username from console and initialise new user w/username + default values
-    fgets(username, USR_LENGTH, stdin);
+
+    //fgets(username, USR_LENGTH, stdin);
+
+    scanf("%s", username);
 
     //remove newline character
     if(username[strlen(username)-1]=='\n'){
