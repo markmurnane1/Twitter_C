@@ -5,7 +5,7 @@
 #ifndef ASSIGNMENT2_TWITTER_CREATE_H
 #define ASSIGNMENT2_TWITTER_CREATE_H
 
-#endif //ASSIGNMENT2_TWITTER_CREATE_H
+
 
 #define TWEET_LENGTH 270
 #define USR_LENGTH 100
@@ -39,3 +39,5 @@ typedef struct twitter{
 void create_twitter_system(twitter * twitter_system);
 
 void create_new_user(twitter * twitter_system);
+
+#endif //ASSIGNMENT2_TWITTER_CREATE_H

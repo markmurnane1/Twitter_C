@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include "twitter_create.h"
 #include "twitter_functionality.h"
+#include "stack.h"
 
 //int x change to pointer to user
 void menu(twitter * twitter_system, int x){
@@ -41,12 +42,15 @@ void menu(twitter * twitter_system, int x){
 }
 
 void getNewsFeed(twitter * twitter_system, int x){
-//complete
+
+    printList();
+
 }
 
 void postTweet(twitter * twitter_system, int x){
     printf("%s\n", "enter your tweet [MAX 270 CHARACTERS]");
     char tw[TWEET_LENGTH];
+
     fgets(tw, TWEET_LENGTH, stdin);
 
     // add statement terminator
@@ -63,8 +67,8 @@ void postTweet(twitter * twitter_system, int x){
     strcpy(&nTweet->user, twitter_system->users[x].username);
 
     // add to news feed
-    twitter_system->news_feed[twitter_system->num_tweets++] = *nTweet;
-
+    //twitter_system->news_feed[twitter_system->num_tweets++] = *nTweet;
+    push(nTweet);
     puts("");
 
 }
@@ -141,7 +145,10 @@ void unfollow(twitter * twitter_system, int x){
     char username[USR_LENGTH];
     printf("%s\n", "Enter the username of the user you want to unfollow");
 
-    fgets(username, USR_LENGTH, stdin);
+    //fgets(username, USR_LENGTH, stdin);
+    scanf("%s*[^\n]", username);
+    fflush(stdin);
+
     if(username[strlen(username)-1]=='\n'){
         username[strlen(username)-1]='\0';
     }
@@ -190,7 +197,8 @@ int endTurn(twitter * twitter_system, int x){
     char username[USR_LENGTH];
     printf("%s\n", "Enter the username of the user to be signed in");
 
-    fgets(username, USR_LENGTH, stdin);
+    //fgets(username, USR_LENGTH, stdin);
+    scanf("%s*[^\n], username");
     if(username[strlen(username)-1]=='\n'){
         username[strlen(username)-1]='\0';
     }
