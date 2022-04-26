@@ -28,6 +28,8 @@ void printList()
 
     while(ptr != NULL)
     {
+        printf("%d.", ptr->nTweet.id);
+        printf("%s:\t", ptr->nTweet.user);
         printf("%s\n", ptr->nTweet.msg);
         ptr = ptr->next;
     }
