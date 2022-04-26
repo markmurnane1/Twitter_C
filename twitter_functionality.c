@@ -12,6 +12,7 @@
 
 //int x change to pointer to user
 void menu(twitter * twitter_system, int x){
+    char c;
     int y = 0;
     void (*f[5])(twitter * twitter_system, int x) = {postTweet, getNewsFeed, follow, unfollow, delete};
 
@@ -20,7 +21,9 @@ void menu(twitter * twitter_system, int x){
         printf("%d followers; %d following\n\n", twitter_system->users[x].num_followers, twitter_system->users[x].num_following);
         printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "Enter 0 to post a tweet", "Enter 1 to view news feed", "Enter 2 to follow a user", "Enter 3 to unfollow a user", "Enter 4 to delete your account", "Enter 5 to end turn", "Enter 6 to end twitter");
         scanf("%d", &y);
-        fflush(stdin);
+        do{                 //manually remove input buffer
+            c = getchar();
+        }while(c != EOF && c != '\n');
 
         if(y == 5){
             if(twitter_system->num_users < 2){
@@ -52,6 +55,7 @@ void postTweet(twitter * twitter_system, int x){
     char tw[TWEET_LENGTH];
 
     fgets(tw, TWEET_LENGTH, stdin);
+    //scanf("%s", tw);
 
     // add statement terminator
     if(tw[strlen(tw)-1]=='\n'){
@@ -88,6 +92,8 @@ void follow(twitter * twitter_system, int x){
     printf("%s\n", "Enter the username of the user you want to follow");
 
     fgets(username, USR_LENGTH, stdin);
+    //scanf("%s", username);
+
     if(username[strlen(username)-1]=='\n'){
         username[strlen(username)-1]='\0';
     }
@@ -145,8 +151,8 @@ void unfollow(twitter * twitter_system, int x){
     char username[USR_LENGTH];
     printf("%s\n", "Enter the username of the user you want to unfollow");
 
-    //fgets(username, USR_LENGTH, stdin);
-    scanf("%s*[^\n]", username);
+    fgets(username, USR_LENGTH, stdin);
+    //scanf("%s*[^\n]", username);
     fflush(stdin);
 
     if(username[strlen(username)-1]=='\n'){
@@ -197,8 +203,8 @@ int endTurn(twitter * twitter_system, int x){
     char username[USR_LENGTH];
     printf("%s\n", "Enter the username of the user to be signed in");
 
-    //fgets(username, USR_LENGTH, stdin);
-    scanf("%s*[^\n], username");
+    fgets(username, USR_LENGTH, stdin);
+    //scanf("%s*[^\n], username");
     if(username[strlen(username)-1]=='\n'){
         username[strlen(username)-1]='\0';
     }

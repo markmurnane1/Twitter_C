@@ -15,12 +15,15 @@ int main() {
 
     //prompt user to create accounts
     int x = 0;
+    char c;
     while(x<2){
         printf("%s\n", "Enter 1 to create new user; enter 2 to end input");
 
         //user choice
         scanf("%d", &x);
-        fflush(stdin);
+        do{                 //manually remove input buffer
+            c = getchar();
+        }while(c != EOF && c != '\n');
 
         if(x==1){
             create_new_user(&twitter_system);
