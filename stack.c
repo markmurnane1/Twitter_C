@@ -31,13 +31,12 @@ void push(tweetPtr *newTweet, tweetPtr *sPtr)
 
 
 int pop(tweetPtr *sPtr, user *x){
-    int n = 0;
         // if tweet is at beginning of list
         if(strcmp(x->username, (*sPtr)->user)==0){
             tweetPtr temp = *sPtr;
             *sPtr = (*sPtr)->nextPtr;
             free(temp);
-            n++;
+            return 1;
         } else {
             tweetPtr prevPtr = *sPtr;
             tweetPtr currentPtr = (*sPtr)->nextPtr;
@@ -51,28 +50,36 @@ int pop(tweetPtr *sPtr, user *x){
                 tweetPtr temp = currentPtr;
                 prevPtr->nextPtr = currentPtr->nextPtr;
                 free(temp);
-                n++;
+                return 1;
             }
 
         }
 
-    return n;
+    return 0;
 
 }
 
 
 void printList(tweetPtr currentPtr, user *x)
 {
-    while(currentPtr != NULL)
+    int j = 0;
+    while(currentPtr != NULL && j <= 10)
     {
-        for(int i = 0; i < x->num_following; i++){
+        for(int i = 0; i <= x->num_following; i++){
             if(strcmp(currentPtr->user, x->following[i])==0 || strcmp(currentPtr->user, x->username)==0){
-                // only tweets by users followed by this user or posted by this user
+                // print tweets by users followed by this user or posted by this user
                 printf("%d.", currentPtr->id);
                 printf("%s: ", currentPtr->user);
                 printf("%s\n", currentPtr->msg);
+                j++;
+                i++;
             }
         }
         currentPtr = currentPtr->nextPtr;
     }
+}
+
+
+void reorder(tweetPtr sPtr, int x){
+    // complete
 }

@@ -15,3 +15,4 @@
 void push(tweetPtr *newTweet, tweetPtr *sPtr);//insert new node
 int pop(tweetPtr *sPtr, user *x); // delete all tweets by this user
 void printList(tweetPtr currentPtr, user *x);
+void reorder(tweetPtr sPtr, int x);
