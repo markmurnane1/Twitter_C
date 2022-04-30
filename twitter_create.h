@@ -18,8 +18,12 @@ typedef struct tweet{
     int id;
     char msg[TWEET_LENGTH];
     char user[USR_LENGTH];
-
+    //linked lists are self referential
+    struct tweet *nextPtr;
 }tweet;
+
+typedef struct tweet Tweet;
+typedef Tweet *tweetPtr;
 
 typedef struct user{
     char username[USR_LENGTH];

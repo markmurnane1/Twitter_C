@@ -10,9 +10,6 @@
 
 void create_twitter_system(twitter * twitter_system){
     //initialise all values in twitter struct
-
-    twitter_system->news_feed[MAX_TWEETS];
-    twitter_system->users[MAX_USERS];
     twitter_system->num_tweets = 0;
     twitter_system->num_users = 0;
 }
@@ -24,9 +21,9 @@ void create_new_user(twitter * twitter_system){
 
     // read username from console and initialise new user w/username + default values
     fflush(stdin);
-    //fgets(username, USR_LENGTH, stdin);
+    fgets(username, USR_LENGTH, stdin);
 
-    scanf("%s*[^\n]", username); //*[^\n] will ignore the newline char
+//    scanf("%s*[^\n]", username); //*[^\n] will ignore the newline char
 
     //remove newline character
     if(username[strlen(username)-1]=='\n'){
@@ -40,8 +37,8 @@ void create_new_user(twitter * twitter_system){
             if(strcmp(username, twitter_system->users[i].username) == 0){
                 while(strcmp(username, twitter_system->users[i].username) == 0){
                     printf("%s\n", "Username taken: please enter a different username");
-                    //fgets(username, USR_LENGTH, stdin);
-                    scanf("%s*[^\n]", username);
+                    fgets(username, USR_LENGTH, stdin);
+//                    scanf("%s*[^\n]", username);  not a good idea to read a string from stdin with scanf
                     if(username[strlen(username)-1]=='\n'){
                         username[strlen(username)-1]='\0';
                     }
