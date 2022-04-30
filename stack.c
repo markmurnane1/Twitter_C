@@ -61,13 +61,18 @@ int pop(tweetPtr *sPtr, user *x){
 }
 
 
-void printList(tweetPtr currentPtr)
+void printList(tweetPtr currentPtr, user *x)
 {
     while(currentPtr != NULL)
     {
-        printf("%d.", currentPtr->id);
-        printf("%s: ", currentPtr->user);
-        printf("%s\n", currentPtr->msg);
+        for(int i = 0; i < x->num_following; i++){
+            if(strcmp(currentPtr->user, x->following[i])==0 || strcmp(currentPtr->user, x->username)==0){
+                // only tweets by users followed by this user or posted by this user
+                printf("%d.", currentPtr->id);
+                printf("%s: ", currentPtr->user);
+                printf("%s\n", currentPtr->msg);
+            }
+        }
         currentPtr = currentPtr->nextPtr;
     }
 }
