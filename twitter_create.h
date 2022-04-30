@@ -11,14 +11,12 @@
 #define USR_LENGTH 100
 #define MAX_FOLLOWERS 30
 #define MAX_FOLLOWING 30
-#define MAX_TWEETS 100
 #define MAX_USERS 100
 
 typedef struct tweet{
     int id;
     char msg[TWEET_LENGTH];
     char user[USR_LENGTH];
-    //linked lists are self referential
     struct tweet *nextPtr;
 }tweet;
 
@@ -34,7 +32,6 @@ typedef struct user{
 }user;
 
 typedef struct twitter{
-    tweet news_feed[MAX_TWEETS];
     user users[MAX_USERS];
     int num_tweets;
     int num_users;

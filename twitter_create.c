@@ -23,8 +23,6 @@ void create_new_user(twitter * twitter_system){
     fflush(stdin);
     fgets(username, USR_LENGTH, stdin);
 
-//    scanf("%s*[^\n]", username); //*[^\n] will ignore the newline char
-
     //remove newline character
     if(username[strlen(username)-1]=='\n'){
         username[strlen(username)-1]='\0';
