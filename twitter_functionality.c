@@ -34,7 +34,7 @@ void menu(twitter * twitter_system, int x){
                 if(twitter_system->num_tweets<1){
                     printf("%s\n", "No tweets have been posted yet");
                 } else {
-                    getNewsFeed(twitter_system, x, sPtr);
+                    printList(sPtr, &twitter_system->users[x]);
                 }
                 break;
             case 3:
@@ -85,13 +85,6 @@ void instructions(void){
            "Enter 5 to end turn",
            "Enter 6 to delete your account",
            "Enter 7 to end program");
-}
-
-void getNewsFeed(twitter * twitter_system, int x, tweetPtr currentPtr){
-    printf("num tweets: %d\nnum users: %d\n", twitter_system->num_tweets, twitter_system->num_users);
-    //loop through following array and pass username of users followed by x, print based off username this ownt show in order
-    printList(currentPtr);
-
 }
 
 void postTweet(twitter * twitter_system, int x, tweetPtr *sPtr){
