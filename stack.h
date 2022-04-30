@@ -12,14 +12,6 @@
 
 #include "twitter_create.h"
 
-struct node
-{
-    tweet nTweet;
-    struct node* next;
-};
-
-struct node *head;
-
-void push(tweet *nTweet);//insert new node
-void pop(tweet *nTweet); //maybe dont need this function because idk if we allow deleting tweets
-void printList();
+void push(tweetPtr *newTweet, tweetPtr *sPtr);//insert new node
+int pop(tweetPtr *sPtr, user *x); // delete all tweets by this user
+void printList(tweetPtr currentPtr);
