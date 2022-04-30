@@ -9,12 +9,11 @@
 
 void menu(twitter * twitter_system, int x);
 
-void getNewsFeed(twitter * twitter_system, int x, tweetPtr currentPtr);
-void postTweet(twitter * twitter_system, int x, tweetPtr *sPtr);
-
 void follow(twitter * twitter_system, int x);
 void unfollow(twitter * twitter_system, int x);
 
+void getNewsFeed(twitter * twitter_system, tweetPtr sPtr, int x);
+void postTweet(twitter * twitter_system, int x, tweetPtr *sPtr);
 int delete(tweetPtr *sPtr, twitter * twitter_system, int x);
 int endTurn(twitter * twitter_system, int x);
 

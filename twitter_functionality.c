@@ -34,7 +34,7 @@ void menu(twitter * twitter_system, int x){
                 if(twitter_system->num_tweets<1){
                     printf("%s\n", "No tweets have been posted yet");
                 } else {
-                    printList(sPtr, &twitter_system->users[x]);
+                    getNewsFeed(twitter_system, sPtr, x);
                 }
                 break;
             case 3:
@@ -85,6 +85,11 @@ void instructions(void){
            "Enter 5 to end turn",
            "Enter 6 to delete your account",
            "Enter 7 to end program");
+}
+
+void getNewsFeed(twitter * twitter_system, tweetPtr sPtr, int x){
+    printf("%s\n", "Latest tweets");
+    printList(sPtr, &twitter_system->users[x]);
 }
 
 void postTweet(twitter * twitter_system, int x, tweetPtr *sPtr){
@@ -268,12 +273,16 @@ int delete(tweetPtr *sPtr , twitter * twitter_system, int x){
             // remove user tweets from linked list
             while(twitter_system->num_tweets>0){
                 int n = pop(sPtr, &twitter_system->users[x]);
+                // continue until no more tweets by this user are found in linked list
                 if(n==0){
+                    //if tweets were removed from the linked list then the id's of each tweet need to be reordered
+                    //reorder(*sPtr, twitter_system->num_tweets);
                     break;
                 } else {
                     twitter_system->num_tweets -= n;
                 }
             }
+
 
             // remove from user list
             if(twitter_system->num_users>1){
