@@ -1,5 +1,5 @@
 //
-// Created by Mark Murnane & Elliot Brighton on 21/04/2022.
+// Created by Elliot Brighton & Mark Murnane on 21/04/2022.
 //
 
 #include <stdio.h>
@@ -10,75 +10,119 @@
 #include "twitter_functionality.h"
 #include "stack.h"
 
-//int x change to pointer to user
-void menu(twitter * twitter_system, int x){
-    char c;
-    int y = 0;
-    void (*f[5])(twitter * twitter_system, int x) = {postTweet, getNewsFeed, follow, unfollow, delete};
 
-    while(y >= 0 && y < 5){
+void menu(twitter * twitter_system, int x){
+    tweetPtr sPtr = NULL;
+    unsigned int y = 0;
+    instructions();
+
+    while(y >= 0){
         printf("\n%s %s\n", twitter_system->users[x].username, "is currently logged in");
         printf("%d followers; %d following\n\n", twitter_system->users[x].num_followers, twitter_system->users[x].num_following);
-        printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "Enter 0 to post a tweet", "Enter 1 to view news feed", "Enter 2 to follow a user", "Enter 3 to unfollow a user", "Enter 4 to delete your account", "Enter 5 to end turn", "Enter 6 to end twitter");
-        scanf("%d", &y);
-        do{                 //manually remove input buffer
-            c = getchar();
-        }while(c != EOF && c != '\n');
+        printf("%s", "?:");
+        scanf("%u", &y);
+        fflush(stdin);
 
-        if(y == 5){
-            if(twitter_system->num_users < 2){
-                printf("%s\n", "There are no other users to switch to");
-            } else {
-                x = endTurn(twitter_system, x);
-            }
-        } else if(y == 6){
-            endTwitter();
-        } else if(y == 3 && twitter_system->users[x].num_following == 0){
-            printf("%s\n", "You aren't following anyone");
-        }else {
-            (*f[y])(twitter_system, x);
+        switch(y){
+            case 0:
+                instructions();
+                break;
+            case 1:
+                postTweet(twitter_system, x, &sPtr);
+                break;
+            case 2:
+                if(twitter_system->num_tweets<1){
+                    printf("%s\n", "No tweets have been posted yet");
+                } else {
+                    getNewsFeed(twitter_system, x, sPtr);
+                }
+                break;
+            case 3:
+                if(twitter_system->num_users < 2){
+                    printf("%s\n", "There are no other users to follow");
+                } else {
+                    follow(twitter_system, x);
+                }
+                break;
+            case 4:
+                if(twitter_system->users[x].num_following == 0){
+                    printf("%s\n", "Following list empty");
+                } else {
+                    unfollow(twitter_system, x);
+                }
+                break;
+            case 5:
+                if(twitter_system->num_users < 2){
+                    printf("%s\n", "There are no other users to switch to");
+                } else {
+                    x = endTurn(twitter_system, x);
+                    instructions();
+                }
+                break;
+            case 6:
+                x = delete(&sPtr, twitter_system, x);
+                break;
+            case 7:
+                endTwitter();
+                break;
+            default:
+                printf("%s\n\n", "Invalid entry");
+                instructions();
+                break;
         }
 
     }
 
-    menu(twitter_system, x);
 }
 
-void getNewsFeed(twitter * twitter_system, int x){
+void instructions(void){
+    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
+           "Enter 0 to view instructions",
+           "Enter 1 to post a tweet",
+           "Enter 2 to view news feed",
+           "Enter 3 to follow a user",
+           "Enter 4 to unfollow a user",
+           "Enter 5 to end turn",
+           "Enter 6 to delete your account",
+           "Enter 7 to end program");
+}
 
-    printList();
+void getNewsFeed(twitter * twitter_system, int x, tweetPtr currentPtr){
+    printf("num tweets: %d\nnum users: %d\n", twitter_system->num_tweets, twitter_system->num_users);
+    //loop through following array and pass username of users followed by x, print based off username this ownt show in order
+    printList(currentPtr);
 
 }
 
-void postTweet(twitter * twitter_system, int x){
+void postTweet(twitter * twitter_system, int x, tweetPtr *sPtr){
     printf("%s\n", "enter your tweet [MAX 270 CHARACTERS]");
     char tw[TWEET_LENGTH];
-
     fgets(tw, TWEET_LENGTH, stdin);
-    //scanf("%s", tw);
-
     // add statement terminator
     if(tw[strlen(tw)-1]=='\n'){
         tw[strlen(tw)-1]='\0';
     }
 
     // add message to new tweet
-    tweet *nTweet = malloc(sizeof(tweet));
-    strcpy(nTweet->msg, tw);
+    tweetPtr newTweet = malloc(sizeof(Tweet));
+    if(newTweet != NULL){
+        // copy from string
+        strcpy(newTweet->msg, tw);
+        // give time stamp & user
+        newTweet->id = (twitter_system->num_tweets++)+1;
+        strcpy(newTweet->user, twitter_system->users[x].username);
 
-    // give time stamp & user
-    nTweet->id = twitter_system->num_tweets;
-    strcpy(&nTweet->user, twitter_system->users[x].username);
+        // add to linked list
+        push(&newTweet, sPtr);
 
-    // add to news feed
-    //twitter_system->news_feed[twitter_system->num_tweets++] = *nTweet;
-    push(nTweet);
-    puts("");
+    } else {
+        printf("%s\n", "Failed to create tweet, no memory available");
+    }
 
 }
 
 void follow(twitter * twitter_system, int x){
-    bool matchFound = false;
+    bool matchFound = false, isAlreadyFollowing = false;
     printf("%s\n", "Follow suggestions:");
     for(int i = 0; i < twitter_system->num_users; i++){
         if(strcmp(twitter_system->users[i].username, twitter_system->users[x].username) != 0){
@@ -92,7 +136,6 @@ void follow(twitter * twitter_system, int x){
     printf("%s\n", "Enter the username of the user you want to follow");
 
     fgets(username, USR_LENGTH, stdin);
-    //scanf("%s", username);
 
     if(username[strlen(username)-1]=='\n'){
         username[strlen(username)-1]='\0';
@@ -110,12 +153,13 @@ void follow(twitter * twitter_system, int x){
                 while(k<twitter_system->users[x].num_following){
                     if(strcmp(username, twitter_system->users[x].following[k]) == 0){
                         printf("%s\n", "You already follow this person");
-                        matchFound = true;
+                        isAlreadyFollowing = true;
                     }
                     k++;
                 }
 
-                if(matchFound){
+                matchFound = true;
+                if(isAlreadyFollowing){
                     break;
                 }
 
@@ -130,17 +174,17 @@ void follow(twitter * twitter_system, int x){
 
 
             }
-
+        }
             //made it to the end of the array without finding a match.
-            if((twitter_system->num_users==i) && strcmp(username, twitter_system->users[i].username)!=0){
+            if(!matchFound){
                 printf("%s\n", "User not found");
             }
-        }
     }
 
 }
 
 void unfollow(twitter * twitter_system, int x){
+    bool matchFound = false;
     printf("%s\n", "People you follow:");
     for(int i = 0; i < twitter_system->users[x].num_following; i++){
         printf("%s\n", twitter_system->users[x].following[i]);
@@ -152,7 +196,6 @@ void unfollow(twitter * twitter_system, int x){
     printf("%s\n", "Enter the username of the user you want to unfollow");
 
     fgets(username, USR_LENGTH, stdin);
-    //scanf("%s*[^\n]", username);
     fflush(stdin);
 
     if(username[strlen(username)-1]=='\n'){
@@ -165,33 +208,108 @@ void unfollow(twitter * twitter_system, int x){
     } else {
         for(int i = 0; i < twitter_system->users[x].num_following; i++){
             if(strcmp(username, twitter_system->users[x].following[i])==0){
+                matchFound = true;
                 //number of users followed after this one in following list
                 int k = (twitter_system->users[x].num_following - i);
 
                 if(i == twitter_system->users[x].num_following-1){
+                    printf("%s %s\n", username, "has been unfollowed");
                     twitter_system->users[x].num_following--;
                     break;
                 } else if(k > 1){
                     for(int j = i; j < k; j++){
                         strcpy(twitter_system->users[x].following[j], twitter_system->users[x].following[j+1]);
                     }
+                    printf("%s %s\n", username, "has been unfollowed");
                     twitter_system->users[x].num_following--;
                 }
 
-
             }
-
-            //made it to the end of the array without finding a match.
-            if((twitter_system->num_users==i) && strcmp(username, twitter_system->users[i].username)!=0){
-                printf("%s\n", "User not found");
-            }
-
         }
+        //made it to the end of the array without finding a match.
+        if(!matchFound){
+            printf("%s\n", "User not found");
+        }
+
     }
 }
 
-void delete(twitter * twitter_system, int x){
-//complete
+int delete(tweetPtr *sPtr , twitter * twitter_system, int x){
+    int y=0;
+
+    printf("%s\n%s\n", "Are you sure you want to delete your account? This action cannot be undone", "1 to continue; 2 to cancel");
+
+    scanf("%d", &y);
+    fflush(stdin);
+
+    while(y != 2){
+        if(y == 1){
+            for(int i = 0; i < twitter_system->num_users; i++){
+                // loop through user array
+                for(int j = 0; j < twitter_system->users[i].num_followers; j++){
+                    // if this user is found on another user's follower list
+                    if(strcmp(twitter_system->users[x].username, twitter_system->users[i].followers[j])==0){
+                        // overwrite this user
+                        for(int k = j; k < twitter_system->users[i].num_followers-1; k++){
+                            strcpy(twitter_system->users[i].followers[k], twitter_system->users[i].followers[k + 1]);
+                        }
+                        twitter_system->users[i].num_followers--;
+                        break;
+                    }
+                }
+
+                for(int j = 0; j < twitter_system->users[i].num_following; j++){
+                    // if this user is found on another user's following list
+                    if(strcmp(twitter_system->users[x].username, twitter_system->users[i].following[j])==0){
+                        // overwrite this user
+                        for(int k = j; k < twitter_system->users[i].num_following-1; k++){
+                            strcpy(twitter_system->users[i].following[k], twitter_system->users[i].following[k + 1]);
+                        }
+                        twitter_system->users[i].num_following--;
+                        break;
+                    }
+                }
+
+            }
+
+            // remove user tweets from linked list
+            while(twitter_system->num_tweets>0){
+                int n = pop(sPtr, &twitter_system->users[x]);
+                if(n==0){
+                    break;
+                } else {
+                    twitter_system->num_tweets -= n;
+                }
+            }
+
+            // remove from user list
+            if(twitter_system->num_users>1){
+                for(int i = x; i < twitter_system->num_users; i++) {
+                    twitter_system->users[i] = twitter_system->users[i+1];
+                }
+            }
+
+            // decrement number of users
+            twitter_system->num_users--;
+
+            // sign in next user or end program
+            if(twitter_system->num_users==0){
+                printf("%s\n", "No users left to switch to");
+                endTwitter();
+            } else {
+                printf("%s\n", "Account deleted. Signing in next user...");
+                return 0;
+            }
+
+        } else if (y != 2) {
+            printf("%s\n%s\n", "Invalid input. Please try again", "1 to continue; 2 to cancel");
+            scanf("%d", &y);
+            fflush(stdin);
+        }
+    }
+
+    return x;
+
 }
 
 int endTurn(twitter * twitter_system, int x){
@@ -200,11 +318,13 @@ int endTurn(twitter * twitter_system, int x){
         printf("%s\n", twitter_system->users[i].username);
     }
 
+    puts("");
+
     char username[USR_LENGTH];
     printf("%s\n", "Enter the username of the user to be signed in");
 
     fgets(username, USR_LENGTH, stdin);
-    //scanf("%s*[^\n], username");
+
     if(username[strlen(username)-1]=='\n'){
         username[strlen(username)-1]='\0';
     }
@@ -216,16 +336,13 @@ int endTurn(twitter * twitter_system, int x){
             return i;
         }
 
-        //made it to the end of the array without finding a match.
-        if((twitter_system->num_users==i) && strcmp(username, twitter_system->users[i].username)!=0){
-            printf("%s\n", "User not found");
-            //return control to original user
-            return x;
-        }
     }
+    //made it to the end of the array without finding a match.
+    printf("%s\n", "User not found");
+    //return control to original user
+    return x;
+
 }
-
-
 
 void endTwitter(void){
     printf("Ending twitter...\n");
