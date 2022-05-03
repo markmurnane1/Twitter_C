@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 void push(tweetPtr *newTweet, tweetPtr *sPtr)
 {
@@ -29,7 +30,6 @@ void push(tweetPtr *newTweet, tweetPtr *sPtr)
 
 }
 
-
 int pop(tweetPtr *sPtr, user *x){
         // if tweet is at beginning of list
         if(strcmp(x->username, (*sPtr)->user)==0){
@@ -38,6 +38,7 @@ int pop(tweetPtr *sPtr, user *x){
             free(temp);
             return 1;
         } else {
+            // cycle through list and find tweet to be deleted
             tweetPtr prevPtr = *sPtr;
             tweetPtr currentPtr = (*sPtr)->nextPtr;
 
@@ -59,27 +60,49 @@ int pop(tweetPtr *sPtr, user *x){
 
 }
 
-
 void printList(tweetPtr currentPtr, user *x)
 {
+    bool tweetPosted = false;
     int j = 0;
     while(currentPtr != NULL && j <= 10)
     {
-        for(int i = 0; i <= x->num_following; i++){
-            if(strcmp(currentPtr->user, x->following[i])==0 || strcmp(currentPtr->user, x->username)==0){
-                // print tweets by users followed by this user or posted by this user
-                printf("%d.", currentPtr->id);
-                printf("%s: ", currentPtr->user);
-                printf("%s\n", currentPtr->msg);
-                j++;
-                i++;
+        // print tweets posted by this user
+        if(strcmp(currentPtr->user, x->username)==0){
+            printf("%d.", currentPtr->id);
+            printf("%s: ", currentPtr->user);
+            printf("%s\n", currentPtr->msg);
+            tweetPosted = true;
+            j++;
+        } else {
+            if(x->num_following>=1){
+                for(int i = 0; i <= x->num_following; i++){
+                    if(strcmp(currentPtr->user, x->following[i])==0){
+                        // print tweets by users followed by this user
+                        printf("%d.", currentPtr->id);
+                        printf("%s: ", currentPtr->user);
+                        printf("%s\n", currentPtr->msg);
+                        tweetPosted = true;
+                        i++;
+                        j++;
+                    }
+                }
             }
         }
         currentPtr = currentPtr->nextPtr;
     }
+    if(!tweetPosted){
+        printf("%s\n", "No tweets to display, try follow another user or post your own tweet");
+    }
 }
 
-
+// change tweet ids to account for tweets removed from the linked list
 void reorder(tweetPtr sPtr, int x){
-    // complete
+    int k = 0;
+    tweetPtr currentPtr = sPtr;
+    while(currentPtr != NULL){
+        currentPtr->id = x-k;
+        k++;
+        currentPtr = currentPtr->nextPtr;
+    }
+
 }
