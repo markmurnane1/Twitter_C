@@ -14,6 +14,7 @@
 void menu(twitter * twitter_system, int x){
     tweetPtr sPtr = NULL;
     unsigned int y = 0;
+    displayStats(twitter_system);
     instructions();
 
     while(y >= 0){
@@ -28,30 +29,33 @@ void menu(twitter * twitter_system, int x){
                 instructions();
                 break;
             case 1:
-                postTweet(twitter_system, x, &sPtr);
+                displayStats(twitter_system);
                 break;
             case 2:
+                postTweet(twitter_system, x, &sPtr);
+                break;
+            case 3:
                 if(twitter_system->num_tweets<1){
                     printf("%s\n", "No tweets have been posted");
                 } else {
                     getNewsFeed(twitter_system, sPtr, x);
                 }
                 break;
-            case 3:
+            case 4:
                 if(twitter_system->num_users < 2){
                     printf("%s\n", "There are no other users to follow");
                 } else {
                     follow(twitter_system, x);
                 }
                 break;
-            case 4:
+            case 5:
                 if(twitter_system->users[x].num_following == 0){
                     printf("%s\n", "You do not follow any accounts");
                 } else {
                     unfollow(twitter_system, x);
                 }
                 break;
-            case 5:
+            case 6:
                 if(twitter_system->num_users < 2){
                     printf("%s\n", "There are no other users to switch to");
                 } else {
@@ -59,11 +63,11 @@ void menu(twitter * twitter_system, int x){
                     instructions();
                 }
                 break;
-            case 6:
+            case 7:
                 x = delete(&sPtr, twitter_system, x);
                 instructions();
                 break;
-            case 7:
+            case 8:
                 endTwitter();
                 break;
             default:
@@ -78,16 +82,25 @@ void menu(twitter * twitter_system, int x){
 
 // display menu options
 void instructions(void){
-    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
+    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
            "Enter 0 to view instructions",
-           "Enter 1 to post a tweet",
-           "Enter 2 to view news feed",
-           "Enter 3 to follow a user",
-           "Enter 4 to unfollow a user",
-           "Enter 5 to end turn",
-           "Enter 6 to delete your account",
-           "Enter 7 to end program");
+           "Enter 1 to view all user statistics",
+           "Enter 2 to post a tweet",
+           "Enter 3 to view news feed",
+           "Enter 4 to follow a user",
+           "Enter 5 to unfollow a user",
+           "Enter 6 to end turn",
+           "Enter 7 to delete your account",
+           "Enter 8 to end program");
 }
+
+void displayStats(twitter * twitter_system){
+    puts("");
+    for(int i = 0; i < twitter_system->num_users; i++){
+        printf("%s: %s; %s: %d; %s: %d\n", "Username", twitter_system->users[i].username, "Following", twitter_system->users[i].num_following, "Followers", twitter_system->users[i].num_followers);
+    }
+}
+
 
 // display tweets posted by signed-in user or users they follow
 void getNewsFeed(twitter * twitter_system, tweetPtr sPtr, int x){

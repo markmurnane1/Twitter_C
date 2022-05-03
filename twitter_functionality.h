@@ -18,4 +18,5 @@ int delete(tweetPtr *sPtr, twitter * twitter_system, int x);
 int endTurn(twitter * twitter_system, int x);
 
 void instructions(void);
+void displayStats(twitter * twitter_system);
 void endTwitter(void);
