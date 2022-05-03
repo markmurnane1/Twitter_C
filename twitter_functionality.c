@@ -151,15 +151,15 @@ void follow(twitter * twitter_system, int x){
 
     //search for user in user array
     if(strcmp(username, twitter_system->users[x].username)==0){
-        printf("%s\n\n", "You can't follow yourself");
+        printf("%s\n", "You can't follow yourself");
     } else {
         int k = search(username, twitter_system->users, twitter_system->num_users);
         if (k == -1) {
-            printf("%s", "User not found");
+            printf("%s\n", "User not found");
         } else {
             int j = searchF(username, twitter_system->users[x].following, twitter_system->users[x].num_following);
             if (j != -1) {
-                printf("%s", "You already follow this account");
+                printf("%s\n", "You already follow this account");
             } else {
                 // increment followers & following
                 strncpy(twitter_system->users[k].followers[twitter_system->users[k].num_followers],
@@ -203,12 +203,12 @@ void unfollow(twitter * twitter_system, int x){
         if(i != -1){
             // find position of soon-to-be-unfollowed user in user array
             int k = search(username, twitter_system->users, twitter_system->num_users);
-            if(twitter_system->users[x].num_following>1){
+            if(twitter_system->users[x].num_following>=1){
                 overwrite(twitter_system->users[x].following, i, twitter_system->users[x].num_following);
             }
-            if(twitter_system->users[k].num_followers>1){
+            if(twitter_system->users[k].num_followers>=1){
                 // find position of user x in follower array
-                int j = searchF(twitter_system->users->username, twitter_system->users[x].following, twitter_system->users[k].num_followers);
+                int j = searchF(twitter_system->users[x].username, twitter_system->users[k].followers, twitter_system->users[k].num_followers);
                 overwrite(twitter_system->users[k].followers, j, twitter_system->users[k].num_followers);
             }
 
@@ -320,7 +320,7 @@ int endTurn(twitter * twitter_system, int x){
 
         // search for user
         if((j = (search(username, twitter_system->users, twitter_system->num_users)))==-1){
-            printf("%s\n", "User not found");
+            printf("%s\n\n", "User not found");
         } else {
             // sign in new user
             x = j;
@@ -333,7 +333,7 @@ int endTurn(twitter * twitter_system, int x){
 
 // end program
 void endTwitter(void){
-    printf("\n%s", "Ending twitter...");
+    printf("\n%s\n", "Ending twitter...");
     exit(0);
 }
 
