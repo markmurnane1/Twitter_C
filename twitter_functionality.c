@@ -76,6 +76,7 @@ void menu(twitter * twitter_system, int x){
 
 }
 
+// display menu options
 void instructions(void){
     printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
            "Enter 0 to view instructions",
@@ -88,11 +89,13 @@ void instructions(void){
            "Enter 7 to end program");
 }
 
+// display tweets posted by signed-in user or users they follow
 void getNewsFeed(twitter * twitter_system, tweetPtr sPtr, int x){
     printf("%s\n", "Latest tweets");
     printList(sPtr, &twitter_system->users[x]);
 }
 
+// create tweet
 void postTweet(twitter * twitter_system, int x, tweetPtr *sPtr){
     printf("%s\n", "enter your tweet [MAX 270 CHARACTERS]");
     char msg[TWEET_LENGTH];
@@ -126,6 +129,7 @@ void postTweet(twitter * twitter_system, int x, tweetPtr *sPtr){
 
 }
 
+// add new user to this user's following list
 void follow(twitter * twitter_system, int x){
     printf("%s\n", "Follow suggestions:");
     for(int i = 0; i < twitter_system->num_users; i++){
@@ -172,6 +176,7 @@ void follow(twitter * twitter_system, int x){
     }
 }
 
+// remove user from this user's following list
 void unfollow(twitter * twitter_system, int x){
     printf("%s\n", "People you follow:");
     for(int i = 0; i < twitter_system->users[x].num_following; i++){
@@ -218,6 +223,7 @@ void unfollow(twitter * twitter_system, int x){
     }
 }
 
+// remove this user from system
 int delete(tweetPtr *sPtr , twitter * twitter_system, int x){
     int y=0;
     printf("%s\n%s\n", "Are you sure you want to delete your account? This action cannot be undone", "1 to continue; 2 to cancel");
@@ -293,6 +299,7 @@ int delete(tweetPtr *sPtr , twitter * twitter_system, int x){
 
 }
 
+// sign in different user
 int endTurn(twitter * twitter_system, int x){
     int j = -1;
 
@@ -324,6 +331,7 @@ int endTurn(twitter * twitter_system, int x){
     return x;
 }
 
+// end program
 void endTwitter(void){
     printf("\n%s", "Ending twitter...");
     exit(0);

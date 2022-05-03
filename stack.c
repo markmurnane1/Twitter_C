@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+// add tweet to linked list
 void push(tweetPtr *newTweet, tweetPtr *sPtr)
 {
     tweetPtr prevPtr = NULL;
@@ -30,6 +31,7 @@ void push(tweetPtr *newTweet, tweetPtr *sPtr)
 
 }
 
+// remove tweet from linked list
 int pop(tweetPtr *sPtr, user *x){
         // if tweet is at beginning of list
         if(strcmp(x->username, (*sPtr)->user)==0){
@@ -60,6 +62,7 @@ int pop(tweetPtr *sPtr, user *x){
 
 }
 
+// display tweets
 void printList(tweetPtr currentPtr, user *x)
 {
     bool tweetPosted = false;
