@@ -16,12 +16,16 @@ void create_twitter_system(twitter * twitter_system){
 
 // create new user
 void create_new_user(twitter * twitter_system){
+    fflush(stdin);
+    // read username from console and initialise new user w/username + default values
     char username[USR_LENGTH];
     puts("Enter Username: [press <ENTER> to end input]");
-
-    // read username from console and initialise new user w/username + default values
-    fflush(stdin);
     fgets(username, USR_LENGTH, stdin);
+
+    while(strcmp(username, "\n")==0){
+        printf("%s\n", "No username entered, please try again");
+        fgets(username, USR_LENGTH, stdin);
+    }
 
     //remove newline character
     if(username[strlen(username)-1]=='\n'){
@@ -36,7 +40,6 @@ void create_new_user(twitter * twitter_system){
                 while(strcmp(username, twitter_system->users[i].username) == 0){
                     printf("%s\n", "Username taken: please enter a different username");
                     fgets(username, USR_LENGTH, stdin);
-//                    scanf("%s*[^\n]", username);  not a good idea to read a string from stdin with scanf
                     if(username[strlen(username)-1]=='\n'){
                         username[strlen(username)-1]='\0';
                     }
