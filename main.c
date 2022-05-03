@@ -16,10 +16,15 @@ int main() {
     //prompt user to create accounts
     unsigned int x = 0;
     while(x >= 0) {
-        printf("%s\n", "Enter 1 to create new user; enter 2 to end user creation process");
-        printf("%s", "?:");
-        scanf("%u", &x);
-        fflush(stdin);
+        if(twitter_system.num_users<MAX_USERS){
+            printf("%s\n", "Enter 1 to create new user; enter 2 to end user creation process");
+            printf("%s", "?:");
+            scanf("%u", &x);
+            fflush(stdin);
+        } else {
+            menu(&twitter_system, 0);
+        }
+
         switch (x) {
             case 1:
                 create_new_user(&twitter_system);
